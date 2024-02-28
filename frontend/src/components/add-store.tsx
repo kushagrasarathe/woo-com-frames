@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -27,41 +27,139 @@ import { Input } from "./ui/input";
 import { ArrowLeft, ChevronRight, HelpCircleIcon } from "lucide-react";
 import helpExample from "@/assets/api-example.jpeg";
 import Image from "next/image";
+import { getCredentialsLocal, storeCredentialsLocal } from "@/utils/apiMethods";
 
 export default function AddStore() {
+  const [hasStoredKeys, setHasStoredKeys] = useState<boolean>(false);
+  const [storedKeys, setStoredKeys] = useState<{
+    consumerKey: string;
+    consumerSecret: string;
+  }>();
+  const [keysToStore, setKeysToStore] = useState<{
+    consumerKey: string | undefined;
+    consumerSecret: string | undefined;
+  }>();
+
+  const checkStoredKeys = async () => {
+    try {
+      const keys = await getCredentialsLocal();
+      if (keys?.consumerKey && keys?.consumerSecret) {
+        setHasStoredKeys(true);
+        setStoredKeys(keys);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const storeKeys = async () => {
+    try {
+      if (keysToStore?.consumerKey && keysToStore?.consumerSecret) {
+        await storeCredentialsLocal(
+          keysToStore.consumerKey,
+          keysToStore.consumerSecret
+        );
+        await checkStoredKeys();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (!hasStoredKeys) {
+      checkStoredKeys();
+    }
+  }, [hasStoredKeys]);
   return (
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <Button>Add Your Store</Button>
+          <Button>{hasStoredKeys ? "Check Keys" : "Add Store Keys"}</Button>
         </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add Keys</DialogTitle>
-            <DialogDescription>
-              Enter your {`store's`} API Key and Secret to get started.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-5">
-            <div className=" flex items-center justify-between">
-              <Label htmlFor="key">Key:</Label>
-              <Input id="key" placeholder="Your API Key" className="w-9/12" />
+
+        {hasStoredKeys && storedKeys ? (
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Your keys</DialogTitle>
+              <DialogDescription>
+                These are the {`store's`} API Key and Secret
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-5">
+              <div className=" flex items-center justify-between">
+                <Label htmlFor="key">Key:</Label>
+                {/* <Input id="key" placeholder="Your API Key" className="w-9/12" /> */}
+                <p>{storedKeys.consumerKey}</p>
+              </div>
+              <div className=" flex items-center justify-between">
+                <Label htmlFor="secret">Secret:</Label>
+                {/* <Input
+                  id="secret"
+                  type="text"
+                  placeholder="Your API Secret"
+                  className="w-9/12"
+                /> */}
+                <p>{storedKeys.consumerSecret}</p>
+              </div>
             </div>
-            <div className=" flex items-center justify-between">
-              <Label htmlFor="secret">Secret:</Label>
-              <Input
-                id="secret"
-                type="text"
-                placeholder="Your API Secret"
-                className="w-9/12"
-              />
+            <div className="flex items-center justify-between mt-3">
+              <HelpDialog />
+              <Button
+                onClick={() => {
+                  setHasStoredKeys(false);
+                  setStoredKeys(undefined);
+                }}
+              >
+                Edit
+              </Button>
             </div>
-          </div>
-          <div className="flex items-center justify-between mt-3">
-            <HelpDialog />
-            <Button>Save</Button>
-          </div>
-        </DialogContent>
+          </DialogContent>
+        ) : (
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add Keys</DialogTitle>
+              <DialogDescription>
+                Enter your {`store's`} API Key and Secret to get started.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-5">
+              <div className=" flex items-center justify-between">
+                <Label htmlFor="key">Key:</Label>
+                <Input
+                  id="key"
+                  placeholder="Your API Key"
+                  className="w-9/12"
+                  onChange={(e) =>
+                    setKeysToStore({
+                      consumerKey: e.target.value,
+                      consumerSecret: keysToStore?.consumerSecret,
+                    })
+                  }
+                />
+              </div>
+              <div className=" flex items-center justify-between">
+                <Label htmlFor="secret">Secret:</Label>
+                <Input
+                  id="secret"
+                  type="password"
+                  placeholder="Your API Secret"
+                  className="w-9/12"
+                  onChange={(e) =>
+                    setKeysToStore({
+                      consumerKey: keysToStore?.consumerKey,
+                      consumerSecret: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            </div>
+            <div className="flex items-center justify-between mt-3">
+              <HelpDialog />
+              <Button onClick={() => storeKeys()}>Save</Button>
+            </div>
+          </DialogContent>
+        )}
       </Dialog>
     </div>
   );
