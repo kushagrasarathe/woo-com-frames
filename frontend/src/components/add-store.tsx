@@ -78,7 +78,7 @@ export default function AddStore() {
           <Button>{hasStoredKeys ? "Check Keys" : "Add Store Keys"}</Button>
         </DialogTrigger>
 
-        {hasStoredKeys && storedKeys ? (
+        {!!hasStoredKeys && !!storedKeys ? (
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Your keys</DialogTitle>
