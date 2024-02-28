@@ -6,20 +6,88 @@ import ProductCard from "@/components/product-card";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { addProducts, createFrameData, productData } from "@/firebase/methods";
+import { getCredentialsLocal, getProducts } from "@/utils/apiMethods";
 import { useState } from "react";
+const BASE_URL = process.env.NEXT_PUBLIC_HOST;
 
 export default function Home() {
-  const [selectedProducts, setSelectedProducts] = useState<any>([]);
+  const [products, setProducts] = useState<any[]>();
+  const [selectedProducts, setSelectedProducts] = useState<any[]>([]);
   const [frameLink, setFrameLink] = useState<string>("");
   const [searchValue, setSearchValue] = useState<string>("");
+  // const [frameLink, setFrameLink] = useState<string>()
 
-  const handleSelectProduct = (productId: string) => {
-    if (selectedProducts.includes(productId)) {
-      setSelectedProducts(
-        selectedProducts.filter((id: any) => id !== productId)
+  const getShopProducts = async () => {
+    try {
+      if (!searchValue) {
+        console.log("Search Value missing");
+        return;
+      }
+      const keys = await getCredentialsLocal();
+      if (!keys) {
+        console.log("Keys missing");
+        return;
+      }
+
+      const products = await getProducts(
+        searchValue,
+        keys.consumerKey,
+        keys.consumerSecret
       );
+      console.log(products);
+      setProducts(products);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const generateFrameLink = async () => {
+    try {
+      console.log(selectedProducts);
+      if (selectedProducts.length == 0 || selectedProducts.length > 4) {
+        console.log("Invalid Product selection");
+        return;
+      }
+      if (!searchValue) {
+        console.log("Shop link missing");
+        return;
+      }
+
+      const frameId = await createFrameData(searchValue, "Demo Merch Shop");
+      if (!frameId) {
+        console.log("Error in Creating frame");
+        return;
+      }
+      // const frameId = "sCl904sRFIWlkT4ELzuR";
+
+      selectedProducts.forEach(async (product) => {
+        const _product: productData = {
+          id: product.id,
+          name: product.name,
+          permaLink: product.permalink,
+          price: product.price,
+          currency: "USD",
+          description: product.short_description,
+          image: product.images[0].src,
+        };
+        console.log(_product);
+        await addProducts(frameId, _product);
+      });
+
+      const framelink = `${BASE_URL}/shop/${frameId}`;
+      console.log(framelink);
+      setFrameLink(framelink);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSelectProduct = (product: any) => {
+    if (selectedProducts.includes(product)) {
+      setSelectedProducts(selectedProducts.filter((id: any) => id !== product));
     } else {
-      setSelectedProducts([...selectedProducts, productId]);
+      setSelectedProducts([...selectedProducts, product]);
     }
   };
 
@@ -35,16 +103,37 @@ export default function Home() {
             placeholder="Search products..."
             className="w-64"
           />
+          <Button
+            variant={"default"}
+            className=" w-1/4"
+            onClick={() => getShopProducts()}
+          >
+            Get products
+          </Button>
         </div>
         <div className=" grid grid-cols-12 gap-4">
           <div className=" col-span-9 flex items-stretch justify-normal gap-6 flex-wrap">
-            <ProductCard
+            {products &&
+              products?.map((product, i) => {
+                return (
+                  <ProductCard
+                    key={i}
+                    product={product}
+                    productId={product.id}
+                    onSelectProduct={handleSelectProduct}
+                    price={product.price}
+                    image={product.images[0].src}
+                  />
+                );
+              })}
+
+            {/* <ProductCard
               productId="abcd"
               onSelectProduct={handleSelectProduct}
               price={200}
               image="https://helios-i.mashable.com/imagery/articles/05Uv3oG3o5kh6djZHmwyhOT/hero-image.fill.size_1248x702.v1697141760.png"
-            />
-            <ProductCard
+            /> */}
+            {/* <ProductCard
               productId="efgh"
               onSelectProduct={handleSelectProduct}
               price={200}
@@ -61,7 +150,7 @@ export default function Home() {
               onSelectProduct={handleSelectProduct}
               price={200}
               image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwEAMilb7dyX9a2wYnbXitlxUSPw9mnOUfC7mmed8YZpk8XlZXPeEubgK7OsGgLN0upwU&usqp=CAU"
-            />
+            /> */}
           </div>
           <div className=" col-span-3 space-y-4">
             <Card className="w-[300px] border-0 shadow-lg rounded-md p-5 space-y-4">
@@ -71,7 +160,11 @@ export default function Home() {
                 Woocommerce frame and sell directly using it.
               </p>
               <div>Products Selected: {selectedProducts.length} </div>
-              <Button variant={"default"} className=" w-full">
+              <Button
+                variant={"default"}
+                className=" w-full"
+                onClick={() => generateFrameLink()}
+              >
                 Generate
               </Button>
             </Card>

@@ -28,7 +28,10 @@ export interface productData {
   image: string;
 }
 
-export const createFrameData = async (shopLink: string, shopName: string) => {
+export const createFrameData = async (
+  shopLink: string,
+  shopName: string
+): Promise<string | undefined> => {
   try {
     const colRef = collection(db, "Frames");
     const docRef = await addDoc(colRef, {
@@ -44,11 +47,11 @@ export const createFrameData = async (shopLink: string, shopName: string) => {
 
 export const addProducts = async (frameId: string, product: productData) => {
   try {
-    const docRef = doc(db, "Frames", frameId, "Products", product.id);
+    const docRef = doc(db, "Frames", frameId, "Products", `${product.id}`);
     await setDoc(docRef, {
       ...product,
     });
-    console.log("Product Added");
+    console.log("Product Added", product.id);
   } catch (error) {
     console.log(error);
   }

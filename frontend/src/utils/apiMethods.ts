@@ -1,4 +1,5 @@
 import CryptoJS from "crypto-js";
+import axios from "axios";
 
 export const getProducts = async (
   shopURL: string,
@@ -6,20 +7,31 @@ export const getProducts = async (
   consumerSecret: string
 ) => {
   try {
-    const response = await fetch(`${shopURL}/wp-json/wc/v3/products`, {
-      method: "GET",
-      headers: {
-        Authorization:
-          "Basic " +
-          Buffer.from(`${consumerKey}:${consumerSecret}`).toString("base64"),
-        "Content-Type": "application/json", // Adjust content type as needed
-        // Add other headers if required
+    const response = await axios.get(`${shopURL}/wp-json/wc/v3/products`, {
+      auth: {
+        username: consumerKey,
+        password: consumerSecret,
       },
     });
-
     console.log(response);
-    const products = (await response.json()).data;
+    const products = (await response).data;
+    console.log(products);
     return products;
+
+    // const response = await fetch(`${shopURL}/wp-json/wc/v3/products`, {
+    //   method: "GET",
+    //   headers: {
+    //     Authorization:
+    //       "Basic " +
+    //       Buffer.from(`${consumerKey}:${consumerSecret}`).toString("base64"),
+    //     "Content-Type": "application/json", // Adjust content type as needed
+    //     // Add other headers if required
+    //   },
+    // });
+
+    // console.log(response);
+    // const products = (await response.json()).data;
+    // return products;
   } catch (error) {
     console.log(error);
   }

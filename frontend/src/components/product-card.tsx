@@ -11,6 +11,7 @@ interface Props {
   image: string;
   price: number;
   onSelectProduct: (productId: string) => void;
+  product: any;
 }
 
 export default function ProductCard({
@@ -18,10 +19,12 @@ export default function ProductCard({
   image,
   price,
   onSelectProduct,
+  product,
 }: Props) {
   const handleSelectProduct = () => {
-    onSelectProduct(productId);
+    onSelectProduct(product);
   };
+
   return (
     <Card className="w-[300px] border-0 shadow-lg  space-y-2 bg-transparent">
       <img
