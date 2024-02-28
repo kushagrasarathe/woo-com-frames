@@ -105,3 +105,28 @@ export const getProductsForFrame = async (
     console.log(error);
   }
 };
+
+export const getProductData = async (
+  frameId: string,
+  productId: string
+): Promise<productData | undefined> => {
+  try {
+    let apiData: productData[] = [];
+    const docRef = doc(db, "Frames", frameId, "Products", productId);
+    const docSnap = await getDoc(docRef);
+    // querySnapshot.forEach((doc) => {
+    //   return JSON.stringify(doc.data());
+    // })
+    if (docSnap.exists()) {
+      console.log("Product data:", docSnap.data());
+      const productData = docSnap.data();
+      //@ts-ignore
+      return productData;
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};

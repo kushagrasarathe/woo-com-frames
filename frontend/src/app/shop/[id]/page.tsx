@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const button: FrameButton = {
       label: `${product.name} $${product.price}`,
       action: "link",
-      target: product.permaLink,
+      target: `${frameProductData.shopLink}/checkout/?add-to-cart=${product.id}`,
     };
     // @ts-ignore
     buttons.push(button as FrameButton);
