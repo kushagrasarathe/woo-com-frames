@@ -29,8 +29,8 @@ export default function ProductCard({
         alt="product image"
         className=" rounded-md w-full h-64 object-cover rounded-md"
       />
-      <div className="flex items-center justify-between rounded-md p-4 bg-violet-300 rounded-b-md h-max">
-        <div className="">
+      <div className="flex items-center justify-between rounded-md p-4 bg-black rounded-b-md h-max">
+        <div className=" text-white">
           Price
           <span className="font-[500]"> ${price}</span>
         </div>
