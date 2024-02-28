@@ -14,6 +14,7 @@ import { db } from "./config";
 export interface frameData {
   frameId: string;
   shopLink: string;
+  shopName: string;
   products: productData[];
 }
 
@@ -27,11 +28,12 @@ export interface productData {
   image: string;
 }
 
-export const createFrameData = async (shopLink: string) => {
+export const createFrameData = async (shopLink: string, shopName: string) => {
   try {
     const colRef = collection(db, "Frames");
     const docRef = await addDoc(colRef, {
       shopLink: shopLink,
+      shopName: shopName,
     });
     console.log("Frame Data object created", docRef.id);
     return docRef.id;
@@ -69,6 +71,7 @@ export const getFrameData = async (
       const FrameProductData = {
         frameId: frameId,
         shopLink: frameData.shopLink,
+        shopName: frameData.shopName,
         products: productsData,
       };
       return FrameProductData;
