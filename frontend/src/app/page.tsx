@@ -206,13 +206,13 @@ export default function Home() {
                 );
               })}
 
-            <ProductCard
+            {/* <ProductCard
               product={"product123"}
               productId="abcd"
               onSelectProduct={handleSelectProduct}
               price={200}
               image="https://www.designinfo.in/wp-content/uploads/2023/06/16643000-1-optimized.jpg"
-            />
+            /> */}
           </div>
           <div className=" col-span-12 space-y-4">
             {!!products?.length && (

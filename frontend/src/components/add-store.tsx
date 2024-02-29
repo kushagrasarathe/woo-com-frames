@@ -67,11 +67,11 @@ export default function AddStore() {
     }
   };
 
-  //   useEffect(() => {
-  //     if (!hasStoredKeys) {
-  //       checkStoredKeys();
-  //     }
-  //   }, [hasStoredKeys]);
+  useEffect(() => {
+    if (!hasStoredKeys) {
+      checkStoredKeys();
+    }
+  }, [hasStoredKeys]);
 
   return (
     <div>
