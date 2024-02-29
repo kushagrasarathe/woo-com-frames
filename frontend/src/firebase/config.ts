@@ -5,7 +5,7 @@ import { getFirestore } from "firebase/firestore";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyA0gCBP18lLOjOPUjRA6XA1QYiQBs7qezA",
   authDomain: "woo-com-frames.firebaseapp.com",
   projectId: "woo-com-frames",

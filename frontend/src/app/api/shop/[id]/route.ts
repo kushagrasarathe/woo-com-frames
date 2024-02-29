@@ -30,15 +30,15 @@ export async function POST(
     }
 
     const product = frameProductData?.products[buttonIndex - 1];
+    console.log(product);
 
-    const imageUrlBase = `${process.env.NEXT_PUBLIC_HOST}`;
     // const frameMessage = await getFrameMessage(body);
     // console.log(frameMessage);
     // TODO :  Need to check if the total entry is already 8 , if yes return an unsuccessful frame
 
     const frame: Frame = {
       version: "vNext",
-      image: `${imageUrlBase}/api/images/contest/participants`,
+      image: `${BASE_URL}/api/image/shop/${params.id}?productId=${product.id}`,
       buttons: [
         {
           label: `Product`,

@@ -6,7 +6,8 @@ import {
   FrameButtonsType,
   getFrameFlattened,
 } from "frames.js";
-import { getFrameData } from "@/firebase/methods";
+import { getFrameData } from "@/firebase/serverMethods";
+// import { getFrameData } from "@/firebase/methods";
 
 type Props = {
   params: { id: string };
@@ -17,7 +18,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_HOST;
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const id = params.id;
   const frameProductData = await getFrameData(id);
-  console.log(frameProductData);
+  // console.log(frameProductData);
 
   if (!frameProductData) {
     return {
@@ -31,11 +32,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   let buttons: FrameButtonsType = [];
 
+  // frameProductData.products.forEach((product) => {
+  //   const button: FrameButton = {
+  //     label: `${product.name} $${product.price}`,
+  //     action: "link",
+  //     target: `${frameProductData.shopLink}/checkout/?add-to-cart=${product.id}`,
+  //   };
+  //   // @ts-ignore
+  //   buttons.push(button as FrameButton);
+  // });
+
   frameProductData.products.forEach((product) => {
     const button: FrameButton = {
       label: `${product.name} $${product.price}`,
-      action: "link",
-      target: `${frameProductData.shopLink}/checkout/?add-to-cart=${product.id}`,
+      action: "post",
     };
     // @ts-ignore
     buttons.push(button as FrameButton);
