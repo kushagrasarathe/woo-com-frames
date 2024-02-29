@@ -18,7 +18,8 @@ import { cn } from "@/lib/utils";
 import { Loader } from "@/components/loader";
 import { toast } from "sonner";
 import { stripHtmlTags } from "@/utils/htmlUtils";
-const BASE_URL = process.env.NEXT_PUBLIC_HOST;
+
+const BASE_URL = process.env.HOST;
 
 interface Steps {
   title: string;
