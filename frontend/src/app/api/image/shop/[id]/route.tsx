@@ -94,12 +94,18 @@ export async function GET(
                   />
                 </div>
               </div>
-              <h2 tw="flex flex-col text-3xl mx-10 sm:text-4xl font-bold tracking-tight text-gray-900 text-left">
+              <h2
+                style={{ fontSize: "36px", fontWeight: 700 }}
+                tw="flex flex-col mx-10 tracking-tight text-gray-900 text-left"
+              >
                 <span>{productData?.name}</span>
                 <span tw="text-base font-normal max-w-sm mt-5">
                   {productData?.description}
                 </span>
-                <span tw="text-indigo-600 text-2xl mt-5">
+                <span
+                  style={{ fontSize: "24px", fontWeight: 700 }}
+                  tw="text-indigo-600 mt-5"
+                >
                   Price: ${productData?.price}
                 </span>
               </h2>
@@ -124,8 +130,11 @@ export async function GET(
       (
         <div tw="flex flex-col items-center justify-center h-[476px] w-[910px]">
           <div tw="bg-violet-200  flex h-full w-full pl-4">
-            <div tw="flex flex-col w-full py-12 px-4 items-start justify-center p-8">
-              <h2 tw="flex flex-col text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 text-left">
+            <div tw="flex flex-col w-full py-12 px-4 items-center justify-center p-8">
+              <h2
+                style={{ fontSize: "32px", fontWeight: 700 }}
+                tw="flex flex-col tracking-tight text-gray-900 text-left"
+              >
                 <span>Woocom Frame</span>
                 <span tw="text-indigo-600">Select Product to Shop</span>
               </h2>
