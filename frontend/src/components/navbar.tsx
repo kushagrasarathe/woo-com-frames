@@ -8,7 +8,7 @@ export default function Navbar() {
       <Link href={"/"} className=" text-xl font-semibold">
         Woocom Frames
       </Link>
-      <AddStore />
+      {/* <AddStore /> */}
     </div>
   );
 }
