@@ -109,7 +109,20 @@ export default function AddStore() {
               <div className=" flex items-center justify-between">
                 <Label htmlFor="key">Key:</Label>
                 {/* <Input id="key" placeholder="Your API Key" className="w-9/12" /> */}
-                <p>{storedKeys.consumerKey}</p>
+                <div className="flex items-center gap-2">
+                  {showAPI ? (
+                    <p>{storedKeys.consumerKey}</p>
+                  ) : (
+                    "********************************"
+                  )}
+                  <div onClick={handleToggleAPI} className="cursor-pointer">
+                    {showAPI ? (
+                      <EyeOffIcon className=" h-4 w-4" />
+                    ) : (
+                      <EyeIcon className=" h-4 w-4" />
+                    )}
+                  </div>
+                </div>
               </div>
               <div className=" flex items-center justify-between">
                 <Label htmlFor="secret">Secret:</Label>
@@ -119,7 +132,20 @@ export default function AddStore() {
                   placeholder="Your API Secret"
                   className="w-9/12"
                 /> */}
-                <p>{storedKeys.consumerSecret}</p>
+                <div className="flex items-center gap-2">
+                  {showSecret ? (
+                    <p>{storedKeys.consumerSecret}</p>
+                  ) : (
+                    "********************************"
+                  )}
+                  <div onClick={handleToggleSecret} className="cursor-pointer">
+                    {showSecret ? (
+                      <EyeOffIcon className=" h-4 w-4" />
+                    ) : (
+                      <EyeIcon className=" h-4 w-4" />
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
             <div className="flex items-center justify-between mt-3">

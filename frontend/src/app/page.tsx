@@ -15,6 +15,7 @@ import { AsteriskSquare, CopyIcon, LucideIcon, Store } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { Loader } from "@/components/loader";
+import { toast } from "sonner";
 const BASE_URL = process.env.NEXT_PUBLIC_HOST;
 
 interface Steps {
@@ -40,15 +41,20 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   const getShopProducts = async () => {
+    toast.loading("Fetching products from your Woocommerce Store");
     try {
       setLoading(true);
       if (!searchValue) {
         console.log("Search Value missing");
+        toast.dismiss();
+        toast.error("No search value found");
         return;
       }
       const keys = await getCredentialsLocal();
       if (!keys) {
+        toast.dismiss();
         console.log("Keys missing");
+        toast.error("Please add your store API and Secret key first");
         return;
       }
 
@@ -60,7 +66,12 @@ export default function Home() {
       console.log(products);
       setProducts(products);
       setLoading(false);
+      toast.success(
+        "Products fetched successfully from your Woocommerce Store"
+      );
     } catch (error) {
+      toast.dismiss();
+      toast.error("Error fetching products, please try again");
       setLoading(false);
       console.log(error);
     }
@@ -69,18 +80,25 @@ export default function Home() {
   const generateFrameLink = async () => {
     try {
       setLoading(true);
+      toast.loading("Generting frame for your Woocommerce Store");
       console.log(selectedProducts);
       if (selectedProducts.length == 0 || selectedProducts.length > 4) {
         console.log("Invalid Product selection");
+        toast.dismiss();
+        toast.error("Please select products to generate Frame for");
         return;
       }
       if (!searchValue) {
+        toast.dismiss();
+        toast.error("Missing store link");
         console.log("Shop link missing");
         return;
       }
 
       const frameId = await createFrameData(searchValue, "Demo Merch Shop");
       if (!frameId) {
+        toast.dismiss();
+        toast.error("Error in Creating frame");
         console.log("Error in Creating frame");
         return;
       }
@@ -104,7 +122,10 @@ export default function Home() {
       console.log(framelink);
       setFrameLink(framelink);
       setLoading(false);
+      toast.success("Your Woocommerce Store Frame is ready ");
     } catch (error) {
+      toast.dismiss();
+      toast.error("Error generating Frame link, please try again");
       console.log(error);
     }
   };
@@ -208,6 +229,7 @@ export default function Home() {
                   <ProductCard
                     key={i}
                     product={product}
+                    productName={product.name}
                     productId={product.id}
                     onSelectProduct={handleSelectProduct}
                     price={product.price}
@@ -219,6 +241,7 @@ export default function Home() {
             {/* <ProductCard
               product={"product123"}
               productId="abcd"
+              productName="abcd"
               onSelectProduct={handleSelectProduct}
               price={200}
               image="https://www.designinfo.in/wp-content/uploads/2023/06/16643000-1-optimized.jpg"
