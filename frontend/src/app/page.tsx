@@ -128,7 +128,7 @@ export default function Home() {
           image: product.images[0].src,
         };
         console.log(_product);
-        // await addProducts(frameId, _product);
+        await addProducts(frameId, _product);
       });
 
       const framelink = `${
