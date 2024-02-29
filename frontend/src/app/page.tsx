@@ -101,8 +101,10 @@ export default function Home() {
         console.log("Shop link missing");
         return;
       }
+      const shopLink = `https://${searchValue.split("/")[2]}`;
+      console.log(shopLink);
 
-      const frameId = await createFrameData(searchValue, "Demo Merch Shop");
+      const frameId = await createFrameData(shopLink, "Demo Merch Shop");
       if (!frameId) {
         toast.dismiss();
         toast.error("Error in Creating frame");
