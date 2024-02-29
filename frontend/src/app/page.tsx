@@ -131,7 +131,9 @@ export default function Home() {
         // await addProducts(frameId, _product);
       });
 
-      const framelink = `${BASE_URL}/shop/${frameId}`;
+      const framelink = `${
+        BASE_URL ? BASE_URL : "https://woo-com-frames.vercel.app"
+      }/shop/${frameId}`;
       console.log(framelink);
       setFrameLink(framelink);
       setLoading(false);
