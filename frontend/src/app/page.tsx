@@ -44,6 +44,7 @@ export default function Home() {
   const getShopProducts = async () => {
     try {
       toast.loading("Fetching products from your Woocommerce Store");
+      toast.dismiss();
       setLoading(true);
       if (!searchValue) {
         console.log("Search Value missing");
