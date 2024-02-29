@@ -61,8 +61,11 @@ export default function Home() {
         return;
       }
 
+      const shopLink = `https://${searchValue.split("/")[2]}`;
+      console.log(shopLink);
+
       const products = await getProducts(
-        searchValue,
+        shopLink,
         keys.consumerKey,
         keys.consumerSecret
       );
@@ -99,18 +102,18 @@ export default function Home() {
         return;
       }
 
-      // const frameId = await createFrameData(searchValue, "Demo Merch Shop");
-      // if (!frameId) {
-      //   toast.dismiss();
-      //   toast.error("Error in Creating frame");
-      //   console.log("Error in Creating frame");
-      //   return;
-      // }
+      const frameId = await createFrameData(searchValue, "Demo Merch Shop");
+      if (!frameId) {
+        toast.dismiss();
+        toast.error("Error in Creating frame");
+        console.log("Error in Creating frame");
+        return;
+      }
       // const frameId = "sCl904sRFIWlkT4ELzuR";
 
       selectedProducts.forEach(async (product) => {
         const strippedString = stripHtmlTags(product.description);
-        console.log(strippedString);
+        // console.log(strippedString);
 
         const _product: productData = {
           id: product.id,
@@ -125,12 +128,12 @@ export default function Home() {
         // await addProducts(frameId, _product);
       });
 
-      // const framelink = `${BASE_URL}/shop/${frameId}`;
-      // console.log(framelink);
-      // setFrameLink(framelink);
-      // setLoading(false);
-      // toast.dismiss();
-      // toast.success("Your Woocommerce Store Frame is ready ");
+      const framelink = `${BASE_URL}/shop/${frameId}`;
+      console.log(framelink);
+      setFrameLink(framelink);
+      setLoading(false);
+      toast.dismiss();
+      toast.success("Your Woocommerce Store Frame is ready ");
     } catch (error) {
       toast.dismiss();
       toast.error("Error generating Frame link, please try again");
