@@ -26,13 +26,13 @@ export default function ProductCard({
   };
 
   return (
-    <Card className="w-[300px] border-0 shadow-lg  space-y-2 bg-transparent">
+    <Card className="w-[300px] h-max border-0 space-y-2 bg-transparent">
       <img
         src={image}
         alt="product image"
-        className=" rounded-md w-full h-64 object-cover rounded-md"
+        className=" rounded-md w-full object-cover shadow-lg rounded-md h-64 max-h-64"
       />
-      <div className="flex items-center justify-between rounded-md p-4 bg-black rounded-b-md h-max">
+      <div className="flex items-center shadow-lg justify-between rounded-md p-4 bg-black rounded-b-md ">
         <div className=" text-white">
           Price
           <span className="font-[500]"> ${price}</span>

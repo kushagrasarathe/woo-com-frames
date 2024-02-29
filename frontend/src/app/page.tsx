@@ -9,13 +9,36 @@ import { Input } from "@/components/ui/input";
 import { addProducts, createFrameData, productData } from "@/firebase/methods";
 import { getCredentialsLocal, getProducts } from "@/utils/apiMethods";
 import { useState } from "react";
+import emptyState from "@/assets/empty-state.png";
+import Image from "next/image";
+import { AsteriskSquare, LucideIcon, Store } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 const BASE_URL = process.env.NEXT_PUBLIC_HOST;
+
+interface Steps {
+  title: string;
+  icon: LucideIcon;
+}
+const steps: Steps[] = [
+  {
+    title: "Add Keys",
+    icon: AsteriskSquare,
+  },
+  {
+    title: "Products",
+    icon: Store,
+  },
+];
 
 export default function Home() {
   const [products, setProducts] = useState<any[]>();
   const [selectedProducts, setSelectedProducts] = useState<any[]>([]);
   const [frameLink, setFrameLink] = useState<string>("");
   const [searchValue, setSearchValue] = useState<string>("");
+
+  const [activeStep, setActiveStep] = useState(0);
+
   // const [frameLink, setFrameLink] = useState<string>()
 
   const getShopProducts = async () => {
@@ -91,12 +114,66 @@ export default function Home() {
     }
   };
 
+  if (!products?.length) {
+    return (
+      <div className=" px-20 py-10 ">
+        <div className=" max-w-3xl flex items-start justify-between mx-auto pb-3 border-b border-neutral-400 mb-5">
+          <div>
+            <h1 className=" text-2xl font-semibold">Welcome</h1>
+            <h1 className=" text-sm font-normal max-w-lg">
+              Add your store keys and then import your store products to start
+              selling directly through frames{" "}
+            </h1>
+          </div>
+          <AddStore />
+        </div>
+        <Card className="flex flex-col relative shadow-lg mt-2 max-w-3xl mx-auto gap-4 items-center justify-between border-b p10 ">
+          {/* <h1 className="text-2xl font-[500] tracking-wide z-10">Welcome :D</h1> */}
+          <img
+            src={
+              "https://cdn.dribbble.com/userupload/5489673/file/original-c7e9bc0fa372bc43f26cbfb7ff41bb37.jpg?resize=1504x1128"
+            }
+            alt="emptyState"
+            className=" max-w-full rounded-t-md max-h-[450px] object-cover w-full"
+          />
+          <div className=" px-10 pb-8 pt-5 flex flex-col-reverse gap-4 items-center">
+            <div className=" text-base max-w-xl text-center">
+              Enter your Woocommerce store URL to get your store products
+            </div>
+            <div className=" flex items-center gap-2 z-10">
+              <Input
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                placeholder="Search products..."
+                className="w-72"
+              />
+              <Button
+                variant={"default"}
+                className=" w-fit"
+                onClick={() => getShopProducts()}
+              >
+                Get products
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <main className="px-20">
-      <Navbar />
-      <div className="py-20 space-y-8">
+      <div className="py-14 space-y-8">
         <div className="flex items-center justify-between border-b border-neutral-300 pb-6 ">
-          <h1 className="text-2xl font-[500] tracking-wide">Select Products</h1>
+          <div className=" space-y-1">
+            <h1 className="text-xl font-[500] tracking-wide">
+              Select Products
+            </h1>
+            <div className=" text-sm">
+              Select products and then generate frame to get your dynamic
+              Woocommerce frame and sell directly using it.
+            </div>
+          </div>
           <div className=" flex items-center gap-2">
             <Input
               value={searchValue}
@@ -113,8 +190,8 @@ export default function Home() {
             </Button>
           </div>
         </div>
-        <div className=" grid grid-cols-12 gap-4">
-          <div className=" col-span-9 flex items-stretch justify-normal gap-6 flex-wrap">
+        <div className=" grid grid-cols-12 gap-12">
+          <div className=" col-span-12 flex items-stretch justify-normal gap-6 flex-wrap">
             {products &&
               products?.map((product, i) => {
                 return (
@@ -129,48 +206,33 @@ export default function Home() {
                 );
               })}
 
-            {/* <ProductCard
+            <ProductCard
+              product={"product123"}
               productId="abcd"
               onSelectProduct={handleSelectProduct}
               price={200}
-              image="https://helios-i.mashable.com/imagery/articles/05Uv3oG3o5kh6djZHmwyhOT/hero-image.fill.size_1248x702.v1697141760.png"
-            /> */}
-            {/* <ProductCard
-              productId="efgh"
-              onSelectProduct={handleSelectProduct}
-              price={200}
-              image="https://helios-i.mashable.com/imagery/articles/05Uv3oG3o5kh6djZHmwyhOT/hero-image.fill.size_1248x702.v1697141760.png"
+              image="https://www.designinfo.in/wp-content/uploads/2023/06/16643000-1-optimized.jpg"
             />
-            <ProductCard
-              productId="ijk"
-              onSelectProduct={handleSelectProduct}
-              price={200}
-              image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwEAMilb7dyX9a2wYnbXitlxUSPw9mnOUfC7mmed8YZpk8XlZXPeEubgK7OsGgLN0upwU&usqp=CAU"
-            />
-            <ProductCard
-              productId="lmno"
-              onSelectProduct={handleSelectProduct}
-              price={200}
-              image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwEAMilb7dyX9a2wYnbXitlxUSPw9mnOUfC7mmed8YZpk8XlZXPeEubgK7OsGgLN0upwU&usqp=CAU"
-            /> */}
           </div>
-          <div className=" col-span-3 space-y-4">
-            <Card className="w-[300px] border-0 shadow-lg rounded-md p-5 space-y-4">
-              <h1 className="text-xl font-[500]">Generate</h1>
-              <p>
-                Select products and then generate frame to get your dynamic
-                Woocommerce frame and sell directly using it.
-              </p>
-              <div>Products Selected: {selectedProducts.length} </div>
-              <Button
-                variant={"default"}
-                className=" w-full"
-                onClick={() => generateFrameLink()}
-              >
-                Generate
-              </Button>
-            </Card>
-            <Card className="w-[300px] border-0 shadow-lg rounded-md p-5 space-y-4">
+          <div className=" col-span-12 space-y-4">
+            {!!products?.length && (
+              <Card className=" w-full flex items-center justify-between border-0 shadow-lg rounded-md p-5">
+                <div>
+                  Products Selected:{" "}
+                  <span className="font-semibold">
+                    {selectedProducts.length}{" "}
+                  </span>
+                </div>
+                <Button
+                  variant={"default"}
+                  className=""
+                  onClick={() => generateFrameLink()}
+                >
+                  Generate
+                </Button>
+              </Card>
+            )}
+            <Card className="w-full border-0 shadow-lg rounded-md p-5 space-y-4">
               <p>
                 Congrats, you just created your Frame, you can now start selling
                 directly through the frame

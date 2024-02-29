@@ -34,7 +34,7 @@ export default function AddStore() {
   const [storedKeys, setStoredKeys] = useState<{
     consumerKey: string;
     consumerSecret: string;
-  }>();
+  } | null>(null);
   const [keysToStore, setKeysToStore] = useState<{
     consumerKey: string | undefined;
     consumerSecret: string | undefined;
@@ -48,6 +48,7 @@ export default function AddStore() {
         setStoredKeys(keys);
       }
     } catch (error) {
+      setHasStoredKeys(false);
       console.log(error);
     }
   };
@@ -66,11 +67,12 @@ export default function AddStore() {
     }
   };
 
-  useEffect(() => {
-    if (!hasStoredKeys) {
-      checkStoredKeys();
-    }
-  }, [hasStoredKeys]);
+  //   useEffect(() => {
+  //     if (!hasStoredKeys) {
+  //       checkStoredKeys();
+  //     }
+  //   }, [hasStoredKeys]);
+
   return (
     <div>
       <Dialog>
@@ -108,7 +110,7 @@ export default function AddStore() {
               <Button
                 onClick={() => {
                   setHasStoredKeys(false);
-                  setStoredKeys(undefined);
+                  setStoredKeys(null);
                 }}
               >
                 Edit
