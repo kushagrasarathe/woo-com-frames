@@ -17,6 +17,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { Loader } from "@/components/loader";
 import { toast } from "sonner";
+import { stripHtmlTags } from "@/utils/htmlUtils";
 const BASE_URL = process.env.NEXT_PUBLIC_HOST;
 
 interface Steps {
@@ -98,35 +99,38 @@ export default function Home() {
         return;
       }
 
-      const frameId = await createFrameData(searchValue, "Demo Merch Shop");
-      if (!frameId) {
-        toast.dismiss();
-        toast.error("Error in Creating frame");
-        console.log("Error in Creating frame");
-        return;
-      }
+      // const frameId = await createFrameData(searchValue, "Demo Merch Shop");
+      // if (!frameId) {
+      //   toast.dismiss();
+      //   toast.error("Error in Creating frame");
+      //   console.log("Error in Creating frame");
+      //   return;
+      // }
       // const frameId = "sCl904sRFIWlkT4ELzuR";
 
       selectedProducts.forEach(async (product) => {
+        const strippedString = stripHtmlTags(product.description);
+        console.log(strippedString);
+
         const _product: productData = {
           id: product.id,
           name: product.name,
           permaLink: product.permalink,
           price: product.price,
           currency: "USD",
-          description: product.short_description,
+          description: strippedString,
           image: product.images[0].src,
         };
         console.log(_product);
-        await addProducts(frameId, _product);
+        // await addProducts(frameId, _product);
       });
 
-      const framelink = `${BASE_URL}/shop/${frameId}`;
-      console.log(framelink);
-      setFrameLink(framelink);
-      setLoading(false);
-      toast.dismiss();
-      toast.success("Your Woocommerce Store Frame is ready ");
+      // const framelink = `${BASE_URL}/shop/${frameId}`;
+      // console.log(framelink);
+      // setFrameLink(framelink);
+      // setLoading(false);
+      // toast.dismiss();
+      // toast.success("Your Woocommerce Store Frame is ready ");
     } catch (error) {
       toast.dismiss();
       toast.error("Error generating Frame link, please try again");

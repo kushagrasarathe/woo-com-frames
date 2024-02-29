@@ -6,7 +6,8 @@ import {
   validateFrameMessage,
 } from "frames.js";
 import { NextRequest } from "next/server";
-const BASE_URL = process.env.NEXT_PUBLIC_HOST;
+
+const BASE_URL = process.env.HOST;
 
 // Shop
 
