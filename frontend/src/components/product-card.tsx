@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Card } from "./ui/card";
 import Image from "next/image";
 import product from "@/assets/sample-product.jpeg";
@@ -9,6 +9,7 @@ import { Button } from "./ui/button";
 interface Props {
   productId: string;
   image: string;
+  productName: string;
   price: number;
   onSelectProduct: (productId: string) => void;
   product: any;
@@ -17,11 +18,15 @@ interface Props {
 export default function ProductCard({
   productId,
   image,
+  productName,
   price,
   onSelectProduct,
   product,
 }: Props) {
+  const [isSelected, setIsSelected] = useState(false);
+
   const handleSelectProduct = () => {
+    setIsSelected((prev) => !prev);
     onSelectProduct(product);
   };
 
@@ -33,12 +38,15 @@ export default function ProductCard({
         className=" rounded-md w-full object-cover shadow-lg rounded-md h-64 max-h-64"
       />
       <div className="flex items-center shadow-lg justify-between rounded-md p-4 bg-black rounded-b-md ">
-        <div className=" text-white">
-          Price
-          <span className="font-[500]"> ${price}</span>
+        <div>
+          <div className="font-[500] text-white">{productName}</div>
+          <div className=" text-white">
+            Price
+            <span className="font-[500]"> ${price}</span>
+          </div>
         </div>
         <Button onClick={handleSelectProduct} variant={"outline"}>
-          Select
+          {isSelected ? "Selected" : "Select"}
         </Button>
       </div>
     </Card>
