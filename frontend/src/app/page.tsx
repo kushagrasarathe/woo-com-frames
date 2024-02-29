@@ -1,5 +1,6 @@
 "use client";
 
+import copy from "copy-to-clipboard";
 import AddStore from "@/components/add-store";
 import Navbar from "@/components/navbar";
 import ProductCard from "@/components/product-card";
@@ -41,8 +42,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   const getShopProducts = async () => {
-    toast.loading("Fetching products from your Woocommerce Store");
     try {
+      toast.loading("Fetching products from your Woocommerce Store");
       setLoading(true);
       if (!searchValue) {
         console.log("Search Value missing");
@@ -66,6 +67,7 @@ export default function Home() {
       console.log(products);
       setProducts(products);
       setLoading(false);
+      toast.dismiss();
       toast.success(
         "Products fetched successfully from your Woocommerce Store"
       );
@@ -122,6 +124,7 @@ export default function Home() {
       console.log(framelink);
       setFrameLink(framelink);
       setLoading(false);
+      toast.dismiss();
       toast.success("Your Woocommerce Store Frame is ready ");
     } catch (error) {
       toast.dismiss();
@@ -139,9 +142,13 @@ export default function Home() {
   };
 
   const copyToClipboard = (text: any) => {
-    navigator.clipboard.writeText(text).catch((error) => {
-      console.error("Error copying to clipboard:", error);
-    });
+    navigator.clipboard
+      .writeText(text)
+      .then(() => toast.success("Copied to clipboard!"))
+      .catch((error) => {
+        toast.error("Error copying to clipboard!");
+        console.error("Error copying to clipboard:", error);
+      });
   };
 
   if (!products?.length) {
@@ -259,9 +266,10 @@ export default function Home() {
                 <Button
                   variant={"default"}
                   className=""
+                  disabled={loading}
                   onClick={() => generateFrameLink()}
                 >
-                  Generate
+                  {loading ? <Loader /> : "Generate"}
                 </Button>
               </Card>
             )}
@@ -274,8 +282,10 @@ export default function Home() {
 
                 <div className="flex items-center gap-3">
                   <div>{frameLink}</div>
-                  <div onClick={() => copyToClipboard(frameLink)}>
-                    <CopyIcon className=" h-4 w-4 active:scale-95 transition-all ease-in-out cursor-pointer" />
+                  <div onCanPlay={copyToClipboard}>
+                    <div onClick={() => copyToClipboard(frameLink)}>
+                      <CopyIcon className=" h-4 w-4 active:scale-95 transition-all ease-in-out cursor-pointer" />
+                    </div>
                   </div>
                 </div>
               </Card>
