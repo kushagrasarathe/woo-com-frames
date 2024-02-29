@@ -15,7 +15,7 @@ type Props = {
   params: { id: string };
 };
 
-const BASE_URL = process.env.NEXT_PUBLIC_HOST;
+const BASE_URL = process.env.HOST;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const id = params.id;
