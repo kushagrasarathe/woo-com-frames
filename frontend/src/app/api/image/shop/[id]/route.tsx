@@ -77,36 +77,70 @@ export async function GET(
 
     // render the data the way we want it to
 
+    // return new ImageResponse(
+    //   (
+    //     <div tw="flex flex-col items-center justify-center h-[476px] w-[910px]">
+    //       <div tw="bg-violet-200  flex h-full w-full pl-4">
+    //         <div tw="flex flex-col w-full py-12 px-4 items-center justify-center p-8">
+    //           <h2
+    //             style={{
+    //               fontSize: "32px",
+    //               fontStyle: "normal",
+    //               fontWeight: 700,
+    //             }}
+    //             tw="flex flex-col tracking-tight text-gray-900 text-left"
+    //           >
+    //             <span>Woocom Frame</span>
+    //             <span tw="text-indigo-600">Select Product to Shop</span>
+    //           </h2>
+    //           <div tw="mt-2 flex bg-white backdrop-md py-6 shadow-md	 rounded-xl px-4">
+    //             {frameProductData?.products &&
+    //               frameProductData.products.map((product, i) => {
+    //                 return (
+    //                   <div tw="flex mx-3 rounded-md shadow-lg" key={i}>
+    //                     <img
+    //                       src={
+    //                         product.image
+    //                           ? product.image
+    //                           : "https://sxvstyle.com/cdn/shop/products/265copy_67fefa22-77b1-4aac-b934-8d320f2aa558_1120x.jpg?v=1658915936"
+    //                       }
+    //                       alt="prodcut image"
+    //                       tw="h-36 w-36 rounded-md"
+    //                     />
+    //                   </div>
+    //                 );
+    //               })}
+    //           </div>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   ),
+    //   {
+    //     width: 910,
+    //     height: 476,
+    //   }
+    // );
     return new ImageResponse(
       (
         <div tw="flex flex-col items-center justify-center h-[476px] w-[910px]">
           <div tw="bg-violet-200  flex h-full w-full pl-4">
             <div tw="flex flex-col w-full py-12 px-4 items-center justify-center p-8">
-              <h2
-                style={{
-                  fontSize: "32px",
-                  fontStyle: "normal",
-                  fontWeight: 700,
-                }}
-                tw="flex flex-col tracking-tight text-gray-900 text-left"
-              >
-                <span>Woocom Frame</span>
-                <span tw="text-indigo-600">Select Product to Shop</span>
-              </h2>
-              <div tw="mt-2 flex bg-white backdrop-md py-6 shadow-md	 rounded-xl px-4">
+              <div tw="flex items-center">
                 {frameProductData?.products &&
                   frameProductData.products.map((product, i) => {
                     return (
-                      <div tw="flex mx-3 rounded-md shadow-lg" key={i}>
-                        <img
-                          src={
-                            product.image
-                              ? product.image
-                              : "https://sxvstyle.com/cdn/shop/products/265copy_67fefa22-77b1-4aac-b934-8d320f2aa558_1120x.jpg?v=1658915936"
-                          }
-                          alt="prodcut image"
-                          tw="h-36 w-36 rounded-md"
-                        />
+                      <div tw="mt-2 flex bg-white backdrop-md py-6 shadow-md	 rounded-xl px-4 mx-4">
+                        <div tw="flex mx-3 rounded-md shadow-lg">
+                          <img
+                            src={
+                              product.image
+                                ? product.image
+                                : "https://sxvstyle.com/cdn/shop/products/265copy_67fefa22-77b1-4aac-b934-8d320f2aa558_1120x.jpg?v=1658915936"
+                            }
+                            alt="prodcut image"
+                            tw="h-64 w-64 rounded-md"
+                          />
+                        </div>
                       </div>
                     );
                   })}
