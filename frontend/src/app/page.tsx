@@ -265,21 +265,21 @@ export default function Home() {
                 </Button>
               </Card>
             )}
-            <Card className="w-full border-0 shadow-lg rounded-md p-5 space-y-4">
-              <p>
-                Congrats, you just created your Frame, you can now start selling
-                directly through the frame
-              </p>
+            {frameLink && (
+              <Card className="w-full border-0 shadow-lg rounded-md p-5 space-y-4">
+                <p>
+                  Congrats, you just created your Frame, you can now start
+                  selling directly through the frame
+                </p>
 
-              {frameLink && (
                 <div className="flex items-center gap-3">
                   <div>{frameLink}</div>
-                  <div onCanPlay={() => copyToClipboard(frameLink)}>
+                  <div onClick={() => copyToClipboard(frameLink)}>
                     <CopyIcon className=" h-4 w-4 active:scale-95 transition-all ease-in-out cursor-pointer" />
                   </div>
                 </div>
-              )}
-            </Card>
+              </Card>
+            )}
           </div>
         </div>
       </div>
