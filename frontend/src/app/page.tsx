@@ -11,9 +11,10 @@ import { getCredentialsLocal, getProducts } from "@/utils/apiMethods";
 import { useState } from "react";
 import emptyState from "@/assets/empty-state.png";
 import Image from "next/image";
-import { AsteriskSquare, LucideIcon, Store } from "lucide-react";
+import { AsteriskSquare, CopyIcon, LucideIcon, Store } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { Loader } from "@/components/loader";
 const BASE_URL = process.env.NEXT_PUBLIC_HOST;
 
 interface Steps {
@@ -36,13 +37,11 @@ export default function Home() {
   const [selectedProducts, setSelectedProducts] = useState<any[]>([]);
   const [frameLink, setFrameLink] = useState<string>("");
   const [searchValue, setSearchValue] = useState<string>("");
-
-  const [activeStep, setActiveStep] = useState(0);
-
-  // const [frameLink, setFrameLink] = useState<string>()
+  const [loading, setLoading] = useState(false);
 
   const getShopProducts = async () => {
     try {
+      setLoading(true);
       if (!searchValue) {
         console.log("Search Value missing");
         return;
@@ -60,13 +59,16 @@ export default function Home() {
       );
       console.log(products);
       setProducts(products);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
 
   const generateFrameLink = async () => {
     try {
+      setLoading(true);
       console.log(selectedProducts);
       if (selectedProducts.length == 0 || selectedProducts.length > 4) {
         console.log("Invalid Product selection");
@@ -101,6 +103,7 @@ export default function Home() {
       const framelink = `${BASE_URL}/shop/${frameId}`;
       console.log(framelink);
       setFrameLink(framelink);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -112,6 +115,12 @@ export default function Home() {
     } else {
       setSelectedProducts([...selectedProducts, product]);
     }
+  };
+
+  const copyToClipboard = (text: any) => {
+    navigator.clipboard.writeText(text).catch((error) => {
+      console.error("Error copying to clipboard:", error);
+    });
   };
 
   if (!products?.length) {
@@ -150,9 +159,10 @@ export default function Home() {
               <Button
                 variant={"default"}
                 className=" w-fit"
+                disabled={loading}
                 onClick={() => getShopProducts()}
               >
-                Get products
+                {loading ? <Loader /> : "Get products"}
               </Button>
             </div>
           </div>
@@ -237,7 +247,15 @@ export default function Home() {
                 Congrats, you just created your Frame, you can now start selling
                 directly through the frame
               </p>
-              {frameLink && <div>{frameLink}</div>}
+
+              {frameLink && (
+                <div className="flex items-center gap-3">
+                  <div>{frameLink}</div>
+                  <div onCanPlay={() => copyToClipboard(frameLink)}>
+                    <CopyIcon className=" h-4 w-4 active:scale-95 transition-all ease-in-out cursor-pointer" />
+                  </div>
+                </div>
+              )}
             </Card>
           </div>
         </div>

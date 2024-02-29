@@ -24,7 +24,13 @@ import {
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import { ArrowLeft, ChevronRight, HelpCircleIcon } from "lucide-react";
+import {
+  ArrowLeft,
+  ChevronRight,
+  EyeIcon,
+  EyeOffIcon,
+  HelpCircleIcon,
+} from "lucide-react";
 import helpExample from "@/assets/api-example.jpeg";
 import Image from "next/image";
 import { getCredentialsLocal, storeCredentialsLocal } from "@/utils/apiMethods";
@@ -39,6 +45,17 @@ export default function AddStore() {
     consumerKey: string | undefined;
     consumerSecret: string | undefined;
   }>();
+
+  const [showAPI, setShowAPI] = useState(false);
+  const [showSecret, setShowSecret] = useState(false);
+
+  const handleToggleAPI = () => {
+    setShowAPI(!showAPI);
+  };
+
+  const handleToggleSecret = () => {
+    setShowSecret(!showSecret);
+  };
 
   const checkStoredKeys = async () => {
     try {
@@ -71,7 +88,7 @@ export default function AddStore() {
     if (!hasStoredKeys) {
       checkStoredKeys();
     }
-  }, [hasStoredKeys]);
+  }, []);
 
   return (
     <div>
@@ -142,18 +159,29 @@ export default function AddStore() {
               </div>
               <div className=" flex items-center justify-between">
                 <Label htmlFor="secret">Secret:</Label>
-                <Input
-                  id="secret"
-                  type="password"
-                  placeholder="Your API Secret"
-                  className="w-9/12"
-                  onChange={(e) =>
-                    setKeysToStore({
-                      consumerKey: keysToStore?.consumerKey,
-                      consumerSecret: e.target.value,
-                    })
-                  }
-                />
+                <div className=" relative w-9/12">
+                  <Input
+                    id="secret"
+                    type={showSecret ? "text" : "password"}
+                    placeholder="Your API Secret"
+                    onChange={(e) =>
+                      setKeysToStore({
+                        consumerKey: keysToStore?.consumerKey,
+                        consumerSecret: e.target.value,
+                      })
+                    }
+                  />
+                  <div
+                    onClick={handleToggleSecret}
+                    className=" absolute top-3 right-3 cursor-pointer"
+                  >
+                    {showSecret ? (
+                      <EyeOffIcon className=" h-4 w-4" />
+                    ) : (
+                      <EyeIcon className=" h-4 w-4" />
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
             <div className="flex items-center justify-between mt-3">
