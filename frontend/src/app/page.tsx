@@ -85,7 +85,7 @@ export default function Home() {
       setLoading(true);
       toast.loading("Generting frame for your Woocommerce Store");
       console.log(selectedProducts);
-      if (selectedProducts.length == 0 || selectedProducts.length > 4) {
+      if (selectedProducts.length == 0 || selectedProducts.length > 2) {
         console.log("Invalid Product selection");
         toast.dismiss();
         toast.error("Please select products to generate Frame for");
